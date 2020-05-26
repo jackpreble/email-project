@@ -20,11 +20,13 @@ import config
 subject = 'hello'
 msg = 'hello'
 
+subject = 'This is a test'
+
 def getContacts(f):
     global names, emails
 
-    names = ['Jack']
-    emails = ['jackpreble@gmail.com']
+    names = []
+    emails = []
 
     with open(f, 'r') as contacts_file:
         for a_contact in contacts_file:
@@ -36,27 +38,29 @@ def getContacts(f):
 def read_template(filename):
     global names, emails
 
-    with open(f, 'r') as template_file:
+    with open(filename, 'r') as template_file:
         template_file_content = template_file.read()
     return Template(template_file_content)
 
 def main():
     global names, emails
 
+    names, emails = getContacts('mycontacts.txt')
+    message_template = read_template('message.txt')
+
     s = smtplib.SMTP(host='smtp.gmail.com', port=587)
     s.starttls()
     s.login(config.address, config.password)
 
-
     for name, email in zip(names, emails):
-        msg = MIMEMiltipart('hello')
+        msg = MIMEMultipart('hello')
 
         message = message_template.substitute(PERSON_NAME = name.title())
         print(message)
 
         msg ['From'] = config.address
         msg['To'] = email
-        msg['Subject'] = "This is TEST"
+        msg['Subject'] = subject
 
         msg.attach(MIMEText(message, 'plain'))
 
