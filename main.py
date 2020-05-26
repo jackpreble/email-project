@@ -43,7 +43,7 @@ def read_template(filename):
     return Template(template_file_content)
 
 def main():
-    global names, emails
+    global names, emails, subject
 
     names, emails = getContacts('mycontacts.txt')
     message_template = read_template('message.txt')
